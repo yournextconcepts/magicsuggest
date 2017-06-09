@@ -569,6 +569,23 @@
         };
 
         /**
+         * Add an additional data record at the end of the records array
+         * @param record
+         */
+        this.addDataRecord = function(record){
+            _cbData.push(record);
+            self._processSuggestions(_cbData);
+        };
+
+        /**
+         * Set the data array manually with preserving the retrieving mechanism (e.g. ajax)
+         * @param data
+         */
+        this.setDataArray = function (data){
+            self._processSuggestions(data);
+        };
+
+        /**
          * Sets the name for the input field so it can be fetched in the form
          * @param name
          */
@@ -709,7 +726,7 @@
                 if(data.length === 0 && ms.getRawValue() !== "") {
                     var noSuggestionText = cfg.noSuggestionText.replace(/\{\{.*\}\}/, ms.input.val());
                     self._updateHelper(noSuggestionText);
-                    ms.collapse();
+                    //ms.collapse(); // disable collapsing if no records are present to allow other entries to show
                 }
 
                 // When free entry is off, add invalid class to input if no data matches
