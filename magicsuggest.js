@@ -368,8 +368,9 @@
          * Add one or multiple json items to the current selection
          * @param items - json object or array of json objects
          * @param isSilent - (optional) set to true to suppress 'selectionchange' event from being triggered
+         * @param isAppeded - (optional) set to true to keep the text in the filter
          */
-        this.addToSelection = function(items, isSilent)
+        this.addToSelection = function(items, isSilent, isAppended)
         {
             if (!cfg.maxSelection || _selection.length < cfg.maxSelection) {
                 if (!$.isArray(items)) {
@@ -384,9 +385,12 @@
                 });
                 if(valuechanged === true) {
                     self._renderSelection();
-                    this.empty();
+                    if (isAppended !== true) {
+                        this.empty();
+                    }
                     if (isSilent !== true) {
                         $(this).trigger('selectionchange', [this, this.getSelection()]);
+                        this.input.focus();
                     }
                 }
             }
@@ -1109,7 +1113,7 @@
                 if(cfg.maxSelection === 1){
                     _selection = [];
                 }
-                ms.addToSelection(item.data('json'));
+                ms.addToSelection(item.data('json'), false, _ctrlDown);
                 item.removeClass('ms-res-item-active');
                 if(cfg.expandOnFocus === false || _selection.length === cfg.maxSelection){
                     ms.collapse();
